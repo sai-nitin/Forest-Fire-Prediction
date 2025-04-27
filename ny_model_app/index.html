@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Form</title>
+</head>
+<body>
+    <h1>Enter Features for Prediction</h1>
+    <form id="predictionForm">
+       <p>SourceIP:</p>  <input type="number" id="feature1" placeholder="Feature 1" required><br>
+       <p>DestinationIP:</p>  <input type="number" id="feature2" placeholder="Feature 2" required><br>
+       <p>SourcePort:</p>  <input type="number" id="feature3" placeholder="Feature 3" required><br>
+       <p>DestinationPort:</p>  <input type="number" id="feature4" placeholder="Feature 4" required><br>
+       <p>Protocol:</p>  <input type="number" id="feature5" placeholder="Feature 5" required><br>
+       <p>BytesSent:</p>  <input type="number" id="feature6" placeholder="Feature 6" required><br>
+       <p>BytesReceived:</p>  <input type="number" id="feature7" placeholder="Feature 7" required><br>
+       <p>PacketsSent:</p>  <input type="number" id="feature8" placeholder="Feature 8" required><br>
+       <p>PacketsReceived:</p>  <input type="number" id="feature9" placeholder="Feature 9" required><br>
+        <input type="submit" value="Predict">
+    </form>
+    <pre>
+        <h1>Prediction Result:  0.3098751828105938</h1>   
+    </pre>
+    <script>
+        document.getElementById('predictionForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const features = [
+                parseFloat(document.getElementById('feature1').value),
+                parseFloat(document.getElementById('feature2').value),
+                parseFloat(document.getElementById('feature3').value),
+                parseFloat(document.getElementById('feature4').value),
+                parseFloat(document.getElementById('feature5').value),
+                parseFloat(document.getElementById('feature6').value),
+                parseFloat(document.getElementById('feature7').value),
+                parseFloat(document.getElementById('feature8').value),
+                parseFloat(document.getElementById('feature9').value)
+            ];
+
+            fetch('http://127.0.0.1:5000/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ features })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Prediction data:', data); // Check the raw data
+                document.getElementById('result').textContent = data.prediction;
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>
